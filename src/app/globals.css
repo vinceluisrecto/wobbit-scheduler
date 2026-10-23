@@ -1,13 +1,145 @@
 @import 'tailwindcss';
 
+/*
+ * Design tokens (shared by the member site and the admin area).
+ * Brand = warm coral (primary actions only), accent = plum (highlights),
+ * ink = warm neutrals, and status colors: success = paid/confirmed,
+ * warning = unpaid/waitlist/filling fast, danger = cancelled/refund due/full.
+ */
 @theme {
-  --color-brand-50: #eef4ff;
-  --color-brand-100: #dbe6fe;
-  --color-brand-500: #4f6ef7;
-  --color-brand-600: #3b55e6;
-  --color-brand-700: #2f43c2;
+  --color-brand-50: #fff4ef;
+  --color-brand-100: #ffe4d6;
+  --color-brand-200: #ffc6ab;
+  --color-brand-300: #ffa07a;
+  --color-brand-400: #fb7a4f;
+  --color-brand-500: #ec5a2e;
+  --color-brand-600: #c73d16; /* 5.1:1 on white: primary buttons and links */
+  --color-brand-700: #a33212;
+  --color-brand-800: #822a12;
+  --color-brand-900: #5f1f0e;
+
+  --color-accent-50: #f7f0ff;
+  --color-accent-100: #ede0ff;
+  --color-accent-200: #dbc2ff;
+  --color-accent-400: #a97cf2;
+  --color-accent-500: #8b55e0;
+  --color-accent-600: #6f3cc2;
+  --color-accent-700: #57309a;
+
+  --color-ink-50: #faf8f6;
+  --color-ink-100: #f3efeb;
+  --color-ink-200: #e6e0da;
+  --color-ink-300: #cfc6bd;
+  --color-ink-400: #a39a91;
+  --color-ink-500: #776f68; /* 4.9:1 on white: secondary text */
+  --color-ink-600: #5c5550;
+  --color-ink-700: #433e3a;
+  --color-ink-800: #2c2826;
+  --color-ink-900: #1c1917;
+
+  --color-success-50: #ecfdf3;
+  --color-success-100: #d1fadf;
+  --color-success-500: #16a34a;
+  --color-success-700: #15703d;
+  --color-warning-50: #fffaeb;
+  --color-warning-100: #fef0c7;
+  --color-warning-500: #f59e0b;
+  --color-warning-700: #93500b;
+  --color-danger-50: #fef3f2;
+  --color-danger-100: #fee4e2;
+  --color-danger-500: #ef4444;
+  --color-danger-700: #b42318;
+
+  --radius-card: 1.5rem;
+  --radius-control: 0.875rem;
+
+  --shadow-card: 0 1px 2px rgb(28 25 23 / 0.04), 0 4px 16px -4px rgb(28 25 23 / 0.08);
+  --shadow-lift: 0 2px 4px rgb(28 25 23 / 0.05), 0 14px 32px -8px rgb(28 25 23 / 0.16);
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 500ms;
+
+  --animate-drift: drift 18s ease-in-out infinite alternate;
+  --animate-drift-slow: drift 26s ease-in-out infinite alternate-reverse;
+  --animate-pulse-dot: pulse-dot 1.6s ease-out infinite;
+
+  @keyframes drift {
+    from {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    to {
+      transform: translate3d(6%, 8%, 0) scale(1.08);
+    }
+  }
+
+  @keyframes pulse-dot {
+    0% {
+      transform: scale(1);
+      opacity: 0.7;
+    }
+    100% {
+      transform: scale(2.6);
+      opacity: 0;
+    }
+  }
+}
+
+/* next/font exposes the font families as CSS variables on <html>. */
+@theme inline {
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-heading), var(--font-body), ui-sans-serif, system-ui, sans-serif;
 }
 
 html {
   scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  overflow-x: clip;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand-600);
+  outline-offset: 2px;
+}
+
+/* Page transitions (React <ViewTransition>): a short crossfade, and the session card morph. */
+::view-transition {
+  pointer-events: none;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--duration-base);
+  animation-timing-function: var(--ease-out-soft);
+}
+
+::view-transition-group(.morph) {
+  animation-duration: 400ms;
+  animation-timing-function: var(--ease-out-soft);
+}
+
+/* Reduced motion: nothing moves. Colors and focus states still change instantly. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
 }

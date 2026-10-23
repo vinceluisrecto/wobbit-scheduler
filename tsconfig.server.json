@@ -27,5 +27,14 @@
     "src/utils",
     "src/constants"
   ],
-  "exclude": ["node_modules", "dist", "tests"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "tests",
+    // Frontend-only helpers in the shared folders: they use `@/` imports and browser APIs.
+    "src/utils/format-price.ts",
+    "src/utils/format-session-time.ts",
+    "src/utils/prefers-reduced-motion.ts",
+    "src/constants/studio.ts"
+  ]
 }

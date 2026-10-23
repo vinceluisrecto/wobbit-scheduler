@@ -221,7 +221,7 @@ Every email goes to **Mailpit**, whatever the recipient (member or admin). View 
 | --- | --- | --- | --- |
 | D1 | How the frontend reaches the API | **A Next.js rewrite** in `next.config.ts`: `/api/:path*` → `${API_URL}/api/:path*`. Same origin, so the auth cookie just works. Adds a new **`API_URL`** env var (default `http://localhost:4000`). | shared config, `.env.example` |
 | D2 | Seed mechanism | **`src/db/seed.ts`** plus a **`yarn seed`** script. It truncates and re-inserts fixed-UUID data with times relative to `now()`. Demo members share one dev-only password, a constant in `seed.ts` that's printed when the seed runs. The demo admin comes from D11. Dev and test only. | `package.json` |
-| D3 | Test database | **A separate `wobbit_exam_test` database.** Jest uses `TEST_DATABASE_URL` when set. | `jest.config.mjs`, `.env.example` |
+| D3 | Test database | **A separate `studio_spot_test` database.** Jest uses `TEST_DATABASE_URL` when set. | `jest.config.mjs`, `.env.example` |
 | D4 | e2e setup | **`playwright.config.ts` `webServer`** starts the API and Next, and runs `yarn seed` first. | `playwright.config.ts` |
 | D5 | Error response shape | **`{ "error": { "code", "message", "details"? } }`**. The existing 404 test is updated to match. | error handler, `health.test.ts` |
 | D6 | Timezone and currency | **Timezone:** times are shown in the **viewer's device timezone**: `Intl.DateTimeFormat` with no `timeZone` option, and `datetime-local` for admin input. Nothing is hard-coded. (This machine is currently `Asia/Manila`.) Times are stored as `timestamptz` in UTC.<br>**Currency:** **USD**. `STUDIO_CURRENCY = 'USD'` in `src/constants/studio.ts`, formatted with `Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })`. | frontend |

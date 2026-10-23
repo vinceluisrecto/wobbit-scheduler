@@ -2,6 +2,7 @@
 import { existsSync } from 'node:fs';
 
 // Load .env so integration tests can reach the database.
+// D3: with NODE_ENV=test (Jest's default), src/config/env.ts uses TEST_DATABASE_URL when it's set.
 if (existsSync('.env')) {
   process.loadEnvFile('.env');
 }
@@ -16,6 +17,8 @@ const config = {
   transform: {
     '^.+\\.ts$': ['ts-jest', { tsconfig: 'tsconfig.server.json' }],
   },
+  // Integration files share one test database and reset it between tests, so run files one at a time.
+  maxWorkers: 1,
 };
 
 export default config;
